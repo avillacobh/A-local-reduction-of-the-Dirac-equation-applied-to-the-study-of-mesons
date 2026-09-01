@@ -103,3 +103,7 @@ stable well beyond the precision quoted.
 
 A single fit at production settings takes on the order of two hours; the
 analysis scripts run in seconds once `fits/` exists.
+
+## Licence
+
+MIT — see `LICENSE`.
