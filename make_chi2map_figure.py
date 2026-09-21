@@ -26,14 +26,13 @@ A(rf"\addplot[only marks,mark=*,mark size=1.6pt,white] "
   rf"coordinates {{({d['x'][4]:.4f},{d['x'][5]:.4f})}};")
 A(r"\end{axis}")
 A(r"\end{tikzpicture}")
-A(r"\caption{$\chi^{2}$ over the $(r_s,d_s)$ plane for variant~v1 on set~A, "
-  r"the other four parameters held at their best-fit values (white dot). The "
-  r"colour scale is capped at $\chi^{2}-\chi^{2}_{\min}=60$; at "
-  r"$r_s=\SI{2.5}{\GeV^{-1}}$ it already reaches $124$. This is a slice, not a "
-  r"profile: it shows that the two scalar range parameters are not degenerate "
-  r"\emph{with each other}, in agreement with their correlation of $-0.18$ in "
-  r"Table~\ref{tab:correlations}, and therefore that the large uncertainty on "
-  r"$r_s$ comes from its correlation with the vector-sector parameters.}")
+A(r"\caption{$\chi^{2}$ over the $(r_s,d_s)$ plane for variant~v1 on set~A, with "
+  r"the other four parameters held at their best-fit values (white dot). The colour "
+  r"scale is limited to $\chi^{2}-\chi^{2}_{\min}=60$; at $r_s=\SI{2.5}{\GeV^{-1}}$ "
+  r"the difference already reaches $124$. The two scalar range parameters are not "
+  r"degenerate with each other, in agreement with their correlation of $-0.18$ in "
+  r"Table~\ref{tab:correlations}; the large uncertainty of $r_s$ comes from its "
+  r"correlations with the other parameters, which are not included in this scan.}")
 A(r"\label{fig:chi2map}")
 A(r"\end{figure}")
 open("chi2map.tex", "w").write("\n".join(L) + "\n")
