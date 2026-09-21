@@ -2,8 +2,7 @@
 
 Code and data behind the master's thesis *A local reduction of the Dirac
 equation for the study of mesons* / *Una reducción local de la ecuación de
-Dirac para el estudio de mesones* (Universidad Nacional de Colombia, advisor
-M. De Sanctis).
+Dirac para el estudio de mesones* (Universidad Nacional de Colombia).
 
 The model solves a local, energy-dependent three-dimensional reduction
 `K†(D₁ + D₂ + W)K` of the two-body Dirac equation, in which the reduction
@@ -72,13 +71,13 @@ the reason given under [Cost and reproducibility](#cost-and-reproducibility).
 **Notes**: `H_construction.md` documents the projected form of the Hamiltonian
 term by term; `V_T_matrix_elements.md` the tensor matrix elements.
 
-The factorised reduction of De Sanctis is **not** implemented here. The
-comparison in §8.7 of the thesis uses his published spectrum, not a
-re-computation, so nothing in this repository reproduces it. One consequence is
-worth stating: `fit_meson.py` exposes `--ws-style {full,desanctis}` for the
-space-vector term and its default is `desanctis`, but that path lazily imports
-a module this repository does not ship. **Pass `--ws-style full` explicitly**,
-as `run_all_potentials_de.sh` does and as every fit reported in the thesis did.
+The factorised reduction used for comparison in §8.7 of the thesis is **not**
+implemented here: that comparison uses the published spectrum of that
+reduction, not a re-computation, so nothing in this repository reproduces it.
+`fit_meson.py` exposes `--ws-style` for the space-vector term, and the only
+accepted value is `full`, the reduction described in the thesis;
+`run_all_potentials_de.sh` passes it explicitly, as every fit reported in the
+thesis did.
 
 **Not used by the thesis.** `meson_potential_coulomb.py`, `potentials.py`,
 `diagnose_grid.py`, `eval_v1_csv2_fixed_b.py` and `test.py` are exploratory
@@ -127,7 +126,7 @@ python fit_meson.py \
 
 **The built-in defaults are not those settings.** `fit_meson.py` defaults to
 `--potential v3`, `--n-states 25`, `--n-grid 4000`, `--max-nfev 1000`,
-`--popsize 15` and `--ws-style desanctis`, which are development values. Pass
+and `--popsize 15`, which are development values. Pass
 the flags above, or use the shell script, to reproduce the thesis.
 
 For a first look that finishes in minutes rather than hours, drop the basis and
@@ -189,7 +188,7 @@ so the tables and the figures cannot drift from the fits they describe.
 |---|---|---|
 | `--with-ws` / `--no-ws` | on | include the spatial part of one-gluon exchange |
 | `--ws-sign {+1,-1}` | `-1` | sign of `V_v^s` relative to `V_v`; `-1` is the OGE-consistent choice |
-| `--ws-style {full,desanctis}` | `desanctis` | reduction style. **Use `full`** — the default path needs a module this repository does not ship |
+| `--ws-style full` | `full` | reduction style of the space-vector term; `full` is the only accepted value |
 
 **Basis and grid**
 
@@ -267,7 +266,6 @@ serial run. The converged minima are stable well beyond the precision quoted.
 
 | symptom | cause |
 |---|---|
-| `ImportError` naming a `desanctis` module | `--ws-style` left at its default; pass `--ws-style full` |
 | `maximum number of function evaluations exceeded` in the log | raise `--max-nfev` |
 | a fitted width collapses to a value below the grid spacing | add `--strict-bounds`, or raise `--n-grid` |
 | no fit reports appear | no `<prefix>*.csv` in the working directory; check `--csv-prefix` |
