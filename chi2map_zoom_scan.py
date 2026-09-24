@@ -2,9 +2,9 @@
 
 Companion of profile_scan.py: uses its chi2() and scan settings, and the
 re-minimised point of min.json (python3 profile_scan.py min).  The lower
-limit of r_s is extended below the fit interval (r_s >= 0.3 GeV^-1) so that
-the whole valley can be seen; for that the interval check of profile_scan.py
-is relaxed for r_s only.  The scan is resumable cell by cell: values already
+limit of r_s is extended below the fit interval (r_s >= 0.3 GeV^-1) down to
+r_s = 0, so that the whole valley can be seen; for that the interval check
+of profile_scan.py is relaxed for r_s only.  The scan is resumable cell by cell: values already
 present in map_zoom.json are kept, so the grid can be extended or the run
 split into several short sessions.
 
@@ -17,10 +17,10 @@ import numpy as np
 sys.path.insert(0, ".")
 src = open("profile_scan.py").read().split('if __name__ == "__main__":')[0]
 exec(src)
-BOUNDS[4] = (-5.0, 20.0)          # r_s may go below the fit interval here
+BOUNDS[4] = (0.0, 20.0)           # r_s may go below the fit interval, but not below 0
 
 best = json.load(open("min.json")); xb = np.array(best["x"])
-rs = np.round(np.linspace(-0.3, 3.0, 45), 6)   # step 0.075 GeV^-1
+rs = np.round(np.linspace(0.0, 3.0, 41), 6)    # step 0.075 GeV^-1
 ds = np.round(np.linspace(1.0, 9.0, 33), 6)    # step 0.25  GeV^-1
 fn = "map_zoom.json"
 old = json.load(open(fn)) if os.path.exists(fn) else None

@@ -10,8 +10,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 CAP = 30.0
-# plotted window (the scan of map_zoom.json covers r_s in [-0.3, 3], d_s in [1, 9])
-RS_MIN, RS_MAX, DS_MIN, DS_MAX = -0.3, 2.2, 1.5, 8.5
+# plotted window (the scan of map_zoom.json covers r_s in [0, 3], d_s in [1, 9])
+RS_MIN, RS_MAX, DS_MIN, DS_MAX = 0.0, 2.2, 1.5, 8.5
 d = json.load(open("map_zoom.json"))
 rs, ds, Z = np.array(d["r_s"]), np.array(d["d_s"]), np.array(d["chi2"], float)
 ir = (rs >= RS_MIN - 1e-9) & (rs <= RS_MAX + 1e-9)
