@@ -7,14 +7,17 @@ from the minimum).  The result is the profile chi^2, whose Delta chi^2 = 1
 crossing is the honest 1-sigma interval -- as opposed to the covariance
 estimate, which assumes a quadratic surface.
 
-Also produces a 2-D map of chi^2 over (r_s, d_s), the pair that the
-covariance matrix reports as degenerate.
+Also produces a 2-D map of chi^2 over (r_s, d_s) at the re-minimised point
+(map.json, read by thesis/make_chi2map_figure.py).  The map is resumable cell
+by cell, so it can be run in several short sessions; its r_s range starts at
+0, below the lower limit of the fit interval, so that the whole valley of the
+minimum is visible.
 
 Usage:
     python3 profile_scan.py time      # cost of one chi^2
     python3 profile_scan.py min       # local re-minimisation at scan settings
     python3 profile_scan.py profile   # 1-D profiles  -> profiles.json
-    python3 profile_scan.py map       # 2-D (r_s,d_s) -> map.json
+    python3 profile_scan.py map [budget_seconds]   # 2-D (r_s,d_s) -> map.json
 """
 import csv, json, os, sys, time
 import numpy as np
@@ -152,18 +155,38 @@ if __name__ == "__main__":
         print(f"{name}: {st['k']['+1']+st['k']['-1']}/8 points done")
 
     elif what == "map":
+        import os
         best = json.load(open("min.json"))
         xb = np.array(best["x"])
-        rs = np.linspace(0.3, 12.0, 22)
-        ds = np.linspace(0.2, 9.0, 22)
-        Z = np.zeros((len(ds), len(rs)))
-        t0 = time.time()
+        rs = np.round(np.linspace(0.0, 3.0, 41), 6)    # step 0.075 GeV^-1
+        ds = np.round(np.linspace(1.0, 9.0, 33), 6)    # step 0.25  GeV^-1
+        BOUNDS[4] = (0.0, BOUNDS[4][1])   # r_s below the fit interval, but >= 0
+        fn = "map.json"
+        known = {}
+        if os.path.exists(fn):
+            old = json.load(open(fn))
+            for a, dv in enumerate(old["d_s"]):
+                for b_, rv in enumerate(old["r_s"]):
+                    v = old["chi2"][a][b_]
+                    if v is not None:
+                        known[(round(rv, 6), round(dv, 6))] = v
+        Z = [[known.get((float(rv), float(dv))) for rv in rs] for dv in ds]
+
+        def save():
+            json.dump(dict(r_s=[float(v) for v in rs], d_s=[float(v) for v in ds],
+                           chi2=Z, x=list(xb), chi2_min=best["chi2"]),
+                      open(fn, "w"))
+
+        budget = float(sys.argv[2]) if len(sys.argv) > 2 else 1e9
+        t0 = time.time(); n = 0
         for a, dv in enumerate(ds):
             for b_, rv in enumerate(rs):
+                if Z[a][b_] is not None:
+                    continue
+                if time.time() - t0 > budget:
+                    break
                 x = xb.copy(); x[4] = rv; x[5] = dv
-                Z[a, b_] = chi2(x)
-            print(f"  row {a+1}/{len(ds)}  ({time.time()-t0:.0f} s)", flush=True)
-        json.dump(dict(r_s=list(rs), d_s=list(ds), chi2=Z.tolist(),
-                       x=list(xb), chi2_min=best["chi2"]),
-                  open("map.json", "w"), indent=1)
-        print("done")
+                Z[a][b_] = chi2(x); n += 1
+            save()
+        missing = sum(v is None for row in Z for v in row)
+        print(f"computed {n} cells in {time.time()-t0:.0f} s; missing {missing}")

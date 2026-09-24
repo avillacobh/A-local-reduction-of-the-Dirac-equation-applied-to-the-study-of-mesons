@@ -11,15 +11,20 @@ on "upper"/"lower", which is fragile where the two families cross or merge.
 The variant key is a single shared legend above the panels.
 
 Parameters are the combined-fit (DE) values of Chapter 8.
-Emits thesis/figures/potentials.tex.
+Emits figures/potentials.tex.
 """
+import os, sys
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+sys.path.insert(0, ROOT)
 import numpy as np
 import meson_potential as v1
 import meson_potential_v2 as v2
 import meson_potential_v3 as v3
 
 M_Q = 1.275
-OUT = "potentials.tex"
+OUT = os.path.join(HERE, "figures", "potentials.tex")
+os.makedirs(os.path.dirname(OUT), exist_ok=True)
 
 # combined-fit DE parameters
 P1 = dict(bar_V_v=1.76679, alpha=2.41160, d_v=2.22520,

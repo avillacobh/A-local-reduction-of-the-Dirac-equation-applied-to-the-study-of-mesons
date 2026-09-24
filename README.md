@@ -53,14 +53,15 @@ the reason given under [Cost and reproducibility](#cost-and-reproducibility).
 
 | file | produces |
 |---|---|
-| `make_thesis_tables.py` | the spectrum, parameter, splitting and χ² tables |
-| `make_thesis_figures.py` | the level, zoom and residual figures |
-| `make_potential_figure.py` | the fitted interactions (Fig. 6.1) |
-| `make_hf_figure.py` | HF(1S) against the regulator width (Fig. 8.1) |
-| `make_chi2map_figure.py` | the χ² map |
+| `thesis/make_thesis_tables.py` | the spectrum, parameter, splitting and χ² tables → `thesis/tables/` |
+| `thesis/make_thesis_figures.py` | the level, zoom and residual figures → `thesis/figures/` |
+| `thesis/make_potential_figure.py` | the fitted interactions (Fig. 6.1) |
+| `thesis/make_hf_figure.py` | HF(1S) against the regularization width `d` (Fig. 8.1) |
+| `thesis/make_chi2map_figure.py` | the χ² map over `(r_s, d_s)` (Fig. 6.2), from `map.json` |
 | `results_extras.py` | radii, the `W_s` on/off study, and `b*` recomputation |
 | `discussion_studies.py` | the operator-by-operator decomposition of the `h_c` inversion |
-| `grid_scan_production.py`, `closed_vs_product.py`, `profile_scan.py` | numerical validation (Appendix F) |
+| `profile_scan.py` | re-minimisation at scan settings (`min`), 1-D profiles (`profile`) and the resumable `(r_s, d_s)` map (`map`) → `min.json`, `map.json` |
+| `grid_scan_production.py`, `closed_vs_product.py` | numerical validation (Appendix F) |
 
 **Tests and verification**:
 
@@ -104,8 +105,12 @@ data set into `--out-dir`.
 
 ```sh
 ./run_all_potentials_de.sh          # the nine reported fits -> fits/*.txt  (hours)
-python make_thesis_tables.py        # tables, from those reports
-python make_thesis_figures.py       # figures
+python thesis/make_thesis_tables.py   # tables, from those reports -> thesis/tables/
+python thesis/make_thesis_figures.py  # figures                    -> thesis/figures/
+python thesis/make_potential_figure.py
+python thesis/make_hf_figure.py
+python profile_scan.py min && python profile_scan.py map   # (r_s, d_s) map, ~10 min
+python thesis/make_chi2map_figure.py
 ```
 
 ### A single fit

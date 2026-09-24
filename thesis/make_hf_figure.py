@@ -1,6 +1,8 @@
 """Figure for Sect. 9.4: HF(1S) and the P-wave singlet-triplet splitting as
 functions of the vector regulator width d (variant v2, other parameters at the
 combined best fit).  Data from discussion_studies.py hcd."""
+import os
+HERE = os.path.dirname(os.path.abspath(__file__))
 D   = [2.5, 3.0, 3.28334, 3.75, 4.5, 5.5, 7.0]
 HF  = [157.30, 109.61, 90.58, 67.63, 44.49, 27.50, 15.09]
 HC  = [-89.06, -62.19, -50.77, -36.94, -23.37, -13.97, -7.49]
@@ -48,7 +50,8 @@ L += [r"\end{axis}", r"\end{tikzpicture}",
       r"The dotted lines are the measured values, $+112.8$ and "
       r"$0.00\pm\SI{0.15}{\MeV}$: no single value of $d$ reproduces both.}",
       r"\label{fig:hf-vs-d}", r"\end{figure}"]
-open("hf_vs_d.tex", "w").write("\n".join(L) + "\n")
-print("wrote hf_vs_d.tex")
+os.makedirs(os.path.join(HERE, "figures"), exist_ok=True)
+open(os.path.join(HERE, "figures", "hf_vs_d.tex"), "w").write("\n".join(L) + "\n")
+print("wrote figures/hf_vs_d.tex")
 for i, d in enumerate(D):
     print(f"  d={d:6.3f}  HF={HF[i]:7.2f}  hc={HC[i]:7.2f}  ratio={HC[i]/HF[i]:+.3f}")

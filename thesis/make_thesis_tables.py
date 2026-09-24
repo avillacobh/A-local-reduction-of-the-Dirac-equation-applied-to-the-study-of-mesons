@@ -6,7 +6,7 @@ Generate the LaTeX result tables of the thesis from the fit reports.
     python3 make_thesis_tables.py --stage LM # LM reports
 
 Reads  fits/fit_{v}_floor20MeV_{STAGE}_{dataset}.txt
-Writes thesis/tables/{chi2,params_*,spectrum_*,bstar}.tex
+Writes tables/{chi2,params_*,spectrum_*,bstar}.tex (next to this script)
 
 Every table is a self-contained LaTeX float with its own \\label, so the
 chapter text never has to be edited when a fit is repeated.
@@ -14,8 +14,10 @@ chapter text never has to be edited when a fit is repeated.
 import argparse, glob, math, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FITS = os.path.join(HERE, "fits")
-OUT  = os.path.join(HERE, "thesis", "tables")
+ROOT = os.path.dirname(HERE)
+FITS = os.path.join(ROOT, "fits")
+OUT  = os.path.join(HERE, "tables")
+os.makedirs(OUT, exist_ok=True)
 
 VARIANTS = ["v1", "v2", "v3"]
 DATASETS = {"setA": "charmonium_states_1",
@@ -110,7 +112,7 @@ _LMAP = {"S": 0, "P": 1, "D": 2, "F": 3}
 def load_csv_exp():
     """(n, L, S, J) -> (exp, sigma) from charmonium_states_*.csv"""
     out = {}
-    for fn in sorted(glob.glob(os.path.join(HERE, "charmonium_states_?.csv"))):
+    for fn in sorted(glob.glob(os.path.join(ROOT, "charmonium_states_?.csv"))):
         with open(fn) as fh:
             next(fh)
             for line in fh:

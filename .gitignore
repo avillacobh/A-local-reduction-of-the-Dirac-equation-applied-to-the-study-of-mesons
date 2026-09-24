@@ -24,3 +24,6 @@ logs/
 # Scratch
 tmp*
 *.tmp
+
+# Scan outputs of profile_scan.py (min, profile, map); regenerated
+*.json

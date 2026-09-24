@@ -5,7 +5,7 @@ Generate the spectrum figures of the thesis from the fit reports.
     python3 make_thesis_figures.py             # DE reports (default)
     python3 make_thesis_figures.py --stage LM
 
-Writes into thesis/figures/:
+Writes into figures/ (next to this script):
     levels.tex        level diagram by J^PC, with the D Dbar threshold
     levels_zoom.tex   zoom on the 1P multiplet (where the h_c inversion lives)
     residuals.tex     E_th - E_exp per state, with the +-20 MeV theory band
@@ -15,8 +15,10 @@ Each file is a bare tikzpicture, to be \\input inside a figure environment.
 import argparse, glob, math, os, re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FITS = os.path.join(HERE, "fits")
-OUT  = os.path.join(HERE, "thesis", "figures")
+ROOT = os.path.dirname(HERE)
+FITS = os.path.join(ROOT, "fits")
+OUT  = os.path.join(HERE, "figures")
+os.makedirs(OUT, exist_ok=True)
 VARIANTS = ["v1", "v2", "v3"]
 STYLE = {"v1": ("blue!70!black", "densely dashed", r"v1"),
          "v2": ("red!70!black",  "densely dotted", r"v2"),
@@ -159,7 +161,7 @@ _LMAP = {"S": 0, "P": 1, "D": 2, "F": 3}
 def load_csv_exp():
     """(n, L, S, J) -> (exp, sigma) from charmonium_states_*.csv"""
     out = {}
-    for fn in sorted(glob.glob(os.path.join(HERE, "charmonium_states_?.csv"))):
+    for fn in sorted(glob.glob(os.path.join(ROOT, "charmonium_states_?.csv"))):
         with open(fn) as fh:
             next(fh)
             for line in fh:

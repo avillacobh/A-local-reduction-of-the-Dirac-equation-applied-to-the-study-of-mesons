@@ -1,18 +1,21 @@
-"""Zoomed contour of chi^2 over (r_s, d_s) for v1/set A, other parameters fixed.
+"""Contour of chi^2 over (r_s, d_s) for v1/set A, other parameters fixed.
 
-Reads map_zoom.json (produced by chi2map_zoom_scan.py) and writes chi2map.tex.
+Reads ../map.json (python3 profile_scan.py min; python3 profile_scan.py map)
+and writes figures/chi2map.tex.
 Contour lines at Delta chi^2 = 1, 4 and 9 are computed here with matplotlib
 and written as `contour prepared` coordinates, so no gnuplot is needed.
 """
-import json, numpy as np
+import json, os, numpy as np
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 CAP = 30.0
-# plotted window (the scan of map_zoom.json covers r_s in [0, 3], d_s in [1, 9])
+# plotted window (the scan of map.json covers r_s in [0, 3], d_s in [1, 9])
 RS_MIN, RS_MAX, DS_MIN, DS_MAX = 0.0, 2.2, 1.5, 8.5
-d = json.load(open("map_zoom.json"))
+d = json.load(open(os.path.join(ROOT, "map.json")))
 rs, ds, Z = np.array(d["r_s"]), np.array(d["d_s"]), np.array(d["chi2"], float)
 ir = (rs >= RS_MIN - 1e-9) & (rs <= RS_MAX + 1e-9)
 id_ = (ds >= DS_MIN - 1e-9) & (ds <= DS_MAX + 1e-9)
@@ -66,6 +69,7 @@ A(r"\caption{$\chi^{2}$ over the $(r_s,d_s)$ plane for variant~v1 on set~A, with
   r"in opposite directions with a slow increase of $\chi^{2}$.}")
 A(r"\label{fig:chi2map}")
 A(r"\end{figure}")
-open("chi2map.tex", "w").write("\n".join(L) + "\n")
-print("wrote chi2map.tex ; chi2_min on grid =", round(cmin, 3),
+os.makedirs(os.path.join(HERE, "figures"), exist_ok=True)
+open(os.path.join(HERE, "figures", "chi2map.tex"), "w").write("\n".join(L) + "\n")
+print("wrote figures/chi2map.tex ; chi2_min on grid =", round(cmin, 3),
       "; contour segments:", sum(len(s) for s in cs.allsegs))
