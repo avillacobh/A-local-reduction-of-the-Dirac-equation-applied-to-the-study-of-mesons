@@ -202,8 +202,9 @@ def emit_tables(outdir=".", recompute=True):
     # ---- W_s effect -------------------------------------------------------
     off, on = spectrum(f2, with_ws=False), spectrum(f2)
     L_ = [hdr, r"\begin{table}[H]\centering",
-          r"\caption{Effect of the space-vector term at fixed parameters "
-          r"(variant~v2, combined best fit). Masses in \si{\MeV}; no refit is "
+          r"\caption{Effect of the spatial part of the vector interaction for "
+          r"fixed values of the parameters (variant~v2, combined best fit). "
+          r"Masses in \si{\MeV}; no refit is "
           r"performed, so every difference is the effect of $\opr{W}_s$ alone.}",
           r"\label{tab:ws-effect}", r"\small",
           r"\begin{tabular}{llccccc}", r"\toprule",
