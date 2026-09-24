@@ -10,11 +10,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 CAP = 30.0
-# plotted window (the scan of map_zoom.json covers r_s in [0.3, 3], d_s in [1, 9])
-RS_MAX, DS_MIN, DS_MAX = 2.2, 1.5, 7.5
+# plotted window (the scan of map_zoom.json covers r_s in [-0.3, 3], d_s in [1, 9])
+RS_MIN, RS_MAX, DS_MIN, DS_MAX = -0.3, 2.2, 1.5, 8.5
 d = json.load(open("map_zoom.json"))
 rs, ds, Z = np.array(d["r_s"]), np.array(d["d_s"]), np.array(d["chi2"], float)
-ir = rs <= RS_MAX + 1e-9
+ir = (rs >= RS_MIN - 1e-9) & (rs <= RS_MAX + 1e-9)
 id_ = (ds >= DS_MIN - 1e-9) & (ds <= DS_MAX + 1e-9)
 rs, ds, Z = rs[ir], ds[id_], Z[np.ix_(id_, ir)]
 cmin = float(np.nanmin(Z))
@@ -57,8 +57,11 @@ A(r"\caption{$\chi^{2}$ over the $(r_s,d_s)$ plane for variant~v1 on set~A, with
   r"the other four parameters held at their best-fit values (white dot). The "
   r"white lines are the contours $\chi^{2}-\chi^{2}_{\min}=1$, $4$ and $9$, and "
   rf"the colour scale is limited to $\chi^{{2}}-\chi^{{2}}_{{\min}}={CAP:.0f}$. "
-  r"Outside the plotted region, up to $r_s=\SI{12}{\GeV^{-1}}$, the difference "
-  r"exceeds $60$ everywhere, and the scan covers $r_s$ up to \SI{3}{\GeV^{-1}} and $d_s$ from $1$ to \SI{9}{\GeV^{-1}}. The minimum lies in a narrow curved valley: across "
+  r"The scan covers $r_s$ up to \SI{3}{\GeV^{-1}} and $d_s$ from $1$ to "
+  r"\SI{9}{\GeV^{-1}}; outside the plotted region, up to $r_s=\SI{12}{\GeV^{-1}}$, "
+  r"the difference exceeds $60$ everywhere. Values of $r_s$ below the lower "
+  r"limit of the fit interval, \SI{0.3}{\GeV^{-1}}, are included only to show "
+  r"the end of the valley. The minimum lies in a narrow curved valley: across "
   r"the valley $\chi^{2}$ rises steeply, while along it $r_s$ and $d_s$ change "
   r"in opposite directions with a slow increase of $\chi^{2}$.}")
 A(r"\label{fig:chi2map}")
