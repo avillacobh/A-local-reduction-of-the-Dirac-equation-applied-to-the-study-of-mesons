@@ -60,7 +60,7 @@ A(r"\caption{$\chi^{2}$ over the $(r_s,d_s)$ plane for variant~v1 on set~A, with
   r"the other four parameters held at their best-fit values (white dot). The "
   r"white lines are the contours $\chi^{2}-\chi^{2}_{\min}=1$, $4$ and $9$, and "
   rf"the colour scale is limited to $\chi^{{2}}-\chi^{{2}}_{{\min}}={CAP:.0f}$. "
-  r"The scan covers $r_s$ up to \SI{3}{\GeV^{-1}} and $d_s$ from $1$ to "
+  r"The scan covers $r_s$ up to \SI{3}{\GeV^{-1}} and $d_s$ from \SI{1}{\GeV^{-1}} to "
   r"\SI{9}{\GeV^{-1}}; outside the plotted region, up to $r_s=\SI{12}{\GeV^{-1}}$, "
   r"the difference exceeds $60$ everywhere. Values of $r_s$ below the lower "
   r"limit of the fit interval, \SI{0.3}{\GeV^{-1}}, are included only to show "
